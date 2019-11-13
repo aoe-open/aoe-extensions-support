@@ -35,10 +35,7 @@ class AoeSupport {
          * 常用的图像模型处理格式一般是ARGB8888的，Android相机默认输出格式为NV21，通过yuv库NV21ToABGR方法进行直接转换
          */
         @JvmStatic
-        external fun convertNV21ToARGB8888(nv21Src: ByteArray,
-                srcWidth: Int, srcHeight: Int
-
-        ): ByteArray
+        external fun convertNV21ToARGB8888(nv21Src: ByteArray, srcWidth: Int, srcHeight: Int): ByteArray
 
         /**
          * 提供ABGR格式图像的裁剪方法
@@ -51,5 +48,10 @@ class AoeSupport {
                 cropWidth: Int, cropHeight: Int
         ): ByteArray
 
+        /**
+         * 提供ABGR格式图像的旋转方法
+         */
+        @JvmStatic
+        external fun rotateARGB(argbSrc: ByteArray, srcWidth: Int, srcHeight: Int, degree: Int): ByteArray
     }
 }

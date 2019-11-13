@@ -21,12 +21,16 @@ extern "C" {
 
 JNIEXPORT jbyteArray JNICALL
 AOE_SUPPORT_JNI_METHOD2(convertNV21ToARGB8888)(JNIEnv *env, jclass instance, jbyteArray nv21Src,
-                                              jint srcWidth, jint srcHeight);
+                                               jint srcWidth, jint srcHeight);
 
 JNIEXPORT jbyteArray JNICALL
 AOE_SUPPORT_JNI_METHOD2(cropABGR)(JNIEnv *env, jobject instance, jbyteArray abgrSrc,
-                                 jint srcWidth, jint srcHeight,
-                                 jint cropX, jint cropY, jint aCropWidth, jint aCropHeight);
+                                  jint srcWidth, jint srcHeight,
+                                  jint cropX, jint cropY, jint aCropWidth, jint aCropHeight);
+
+JNIEXPORT jbyteArray JNICALL
+AOE_SUPPORT_JNI_METHOD2(rotateARGB)(JNIEnv *env, jclass instance, jbyteArray nv21Src,
+                                    jint srcWidth, jint srcHeight, jint degree);
 
 #ifdef __cplusplus
 }

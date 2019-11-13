@@ -23,7 +23,7 @@ extern "C" {
 
 JNIEXPORT jbyteArray JNICALL
 AOE_SUPPORT_JNI_METHOD2(convertNV21ToARGB8888)(JNIEnv *env, jclass instance, jbyteArray nv21Src,
-                                              jint srcWidth, jint srcHeight) {
+                                               jint srcWidth, jint srcHeight) {
     jbyte *nv21SrcData = env->GetByteArrayElements(nv21Src, NULL);
     int responseDimens = (srcWidth * srcHeight) << 2;
 
@@ -40,12 +40,13 @@ AOE_SUPPORT_JNI_METHOD2(convertNV21ToARGB8888)(JNIEnv *env, jclass instance, jby
     delete[] abgrData;
 
     return response;
+
 }
 
 JNIEXPORT jbyteArray JNICALL
 AOE_SUPPORT_JNI_METHOD2(cropABGR)(JNIEnv *env, jobject instance, jbyteArray abgrSrc,
-                                 jint srcWidth, jint srcHeight,
-                                 jint cropX, jint cropY, jint aCropWidth, jint aCropHeight) {
+                                  jint srcWidth, jint srcHeight,
+                                  jint cropX, jint cropY, jint aCropWidth, jint aCropHeight) {
     if (cropX < 0) {
         cropX = 0;
     }
@@ -71,12 +72,12 @@ AOE_SUPPORT_JNI_METHOD2(cropABGR)(JNIEnv *env, jobject instance, jbyteArray abgr
 
     jbyte *abgrSrcData = env->GetByteArrayElements(abgrSrc, NULL);
 
-    uint8_t *source = (uint8_t *)abgrSrcData + (cropY * srcWidth + cropX) * channelNum;
-    uint8_t *dst =  clipResult;
-    for(int i = 0; i < cropHeight; i++){
+    uint8_t *source = (uint8_t *) abgrSrcData + (cropY * srcWidth + cropX) * channelNum;
+    uint8_t *dst = clipResult;
+    for (int i = 0; i < cropHeight; i++) {
         memcpy(dst, source, cropWidth * channelNum);
         source += srcWidth * channelNum;
-        dst+= cropWidth * channelNum;
+        dst += cropWidth * channelNum;
     }
 
     jbyteArray response = env->NewByteArray(responseDimens);
@@ -84,6 +85,46 @@ AOE_SUPPORT_JNI_METHOD2(cropABGR)(JNIEnv *env, jobject instance, jbyteArray abgr
     env->ReleaseByteArrayElements(abgrSrc, abgrSrcData, 0);
 
     delete[] clipResult;
+    return response;
+}
+
+JNIEXPORT jbyteArray JNICALL
+AOE_SUPPORT_JNI_METHOD2(rotateARGB)(JNIEnv *env, jclass instance, jbyteArray argbSrc,
+                                    jint srcWidth, jint srcHeight, jint degree) {
+    jbyte *argbSrcData = env->GetByteArrayElements(argbSrc, NULL);
+    const int channelNum = 4;
+    const int responseDimens = (srcWidth * srcHeight * channelNum);
+    uint8_t *rotateResult = new uint8_t[responseDimens];
+
+    RotationMode rotationMode = kRotate0;
+    switch (degree) {
+        case kRotate90:
+            rotationMode = kRotate90;
+            break;
+        case kRotate180:
+            rotationMode = kRotate180;
+            break;
+        case kRotate270:
+            rotationMode = kRotate270;
+            break;
+    }
+
+    int stride = srcWidth;
+    if (degree == 90 || degree == 270) {
+        stride = srcHeight;
+    }
+
+    libyuv::ARGBRotate((const uint8_t *) argbSrcData, srcWidth * channelNum,
+                       rotateResult, stride * channelNum,
+                       srcWidth, srcHeight,
+                       rotationMode);
+
+
+    jbyteArray response = env->NewByteArray(responseDimens);
+    env->SetByteArrayRegion(response, 0, responseDimens, (jbyte *) rotateResult);
+    env->ReleaseByteArrayElements(argbSrc, argbSrcData, 0);
+
+    delete[] rotateResult;
     return response;
 }
 

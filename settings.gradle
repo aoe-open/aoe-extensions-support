@@ -1,2 +1,2 @@
-include ':support', ':common'
+include ':support'
 rootProject.name='extensions-support'
