@@ -32,6 +32,10 @@ JNIEXPORT jbyteArray JNICALL
 AOE_SUPPORT_JNI_METHOD2(rotateARGB)(JNIEnv *env, jclass instance, jbyteArray nv21Src,
                                     jint srcWidth, jint srcHeight, jint degree);
 
+JNIEXPORT jbyteArray JNICALL
+AOE_SUPPORT_JNI_METHOD2(scaleBGRA)(JNIEnv *env, jclass instance, jbyteArray bgraSrc, jint srcWidth,
+                                    jint srcHeight, jint dstWidth, jint dstHeight, jint filterMode);
+
 #ifdef __cplusplus
 }
 #endif

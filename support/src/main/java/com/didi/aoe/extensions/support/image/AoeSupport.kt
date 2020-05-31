@@ -53,5 +53,12 @@ class AoeSupport {
          */
         @JvmStatic
         external fun rotateARGB(argbSrc: ByteArray, srcWidth: Int, srcHeight: Int, degree: Int): ByteArray
+
+        /**
+         * 提供JAVA层BGRA/RGBA格式图像的Scale方法
+         */
+        @JvmStatic
+        external fun scaleBGRA(bgraSrc: ByteArray, srcWidth: Int, srcHeight: Int, dstWidth: Int,
+                               dstHeight: Int, filterMode: Int): ByteArray
     }
 }

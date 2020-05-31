@@ -128,6 +128,28 @@ AOE_SUPPORT_JNI_METHOD2(rotateARGB)(JNIEnv *env, jclass instance, jbyteArray arg
     return response;
 }
 
+JNIEXPORT jbyteArray JNICALL
+AOE_SUPPORT_JNI_METHOD2(scaleBGRA)(JNIEnv *env, jclass instance, jbyteArray bgraSrc, jint srcWidth,
+                                  jint srcHeight, jint dstWidth, jint dstHeight, jint filterMode) {
+    if (filterMode < 0 || filterMode > 3) {
+        filterMode = 0;
+    }
+
+    jbyte *rgbaData = env->GetByteArrayElements(rgbaSrc, NULL);
+
+    int responseDimens = dstWidth * dstHeight << 2;
+    uint8_t *dstData = new uint8_t[responseDimens];
+    libyuv::ARGBScale((uint8_t *) rgbaData, srcWidth << 2, srcWidth, srcHeight, dstData,
+                      dstWidth << 2, dstWidth, dstHeight, libyuv::FilterMode(filterMode));
+
+    jbyteArray response = env->NewByteArray(responseDimens);
+    env->SetByteArrayRegion(response, 0, responseDimens, (jbyte *) dstData);
+    env->ReleaseByteArrayElements(rgbaSrc, rgbaData, 0);
+
+    delete[] dstData;
+    return response;
+}
+
 #ifdef __cplusplus
 }
 #endif
