@@ -135,7 +135,7 @@ AOE_SUPPORT_JNI_METHOD2(scaleBGRA)(JNIEnv *env, jclass instance, jbyteArray bgra
         filterMode = 0;
     }
 
-    jbyte *rgbaData = env->GetByteArrayElements(rgbaSrc, NULL);
+    jbyte *rgbaData = env->GetByteArrayElements(bgraSrc, NULL);
 
     int responseDimens = dstWidth * dstHeight << 2;
     uint8_t *dstData = new uint8_t[responseDimens];
@@ -144,7 +144,7 @@ AOE_SUPPORT_JNI_METHOD2(scaleBGRA)(JNIEnv *env, jclass instance, jbyteArray bgra
 
     jbyteArray response = env->NewByteArray(responseDimens);
     env->SetByteArrayRegion(response, 0, responseDimens, (jbyte *) dstData);
-    env->ReleaseByteArrayElements(rgbaSrc, rgbaData, 0);
+    env->ReleaseByteArrayElements(bgraSrc, rgbaData, 0);
 
     delete[] dstData;
     return response;
